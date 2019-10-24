@@ -4,4 +4,4 @@ ADD src /src
 
 RUN pip install coverage
 
-CMD [ "python", "./src/CSVTests.py" ]
+CMD [ "python", "./src/CalculatorTests.py" ]
