@@ -1,21 +1,5 @@
-from CsvReader.CsvReader import CsvReader
-
-
-def addition(a, b):
-    c = a + b
-    return c
-
-
-def subtraction(a, b):
-    a = int(a)
-    b = int(b)
-    c = b - a
-    return c
-
-
-def mean(data):
-    mean = data
-    return mean
+from Calculator.Subtraction import subtraction
+from Calculator.Addition import addition
 
 
 class Calculator:

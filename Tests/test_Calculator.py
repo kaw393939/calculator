@@ -2,7 +2,6 @@ import unittest
 
 from Calculator.Calculator import Calculator
 from CsvReader.CsvReader import CsvReader
-from pprint import pprint
 import os
 
 class MyTestCase(unittest.TestCase):
@@ -13,10 +12,11 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(self.calculator, Calculator)
 
     def test_subtraction(self):
-        test_data = CsvReader(os.path.join(os.path.dirname(__file__),'/Tests/subtraction.csv')).data
+        test_data = CsvReader('/Tests/Data/subtraction.csv').data
         for row in test_data:
-            self.assertEqual(self.calculator.subtract(row['Value 1'], row['Value 2']), int(row['Result']))
-            self.assertEqual(self.calculator.result, int(row['Result']))
+            result = float(row['Result'])
+            self.assertEqual(self.calculator.subtract(row['Value 1'], row['Value 2']), result)
+            self.assertEqual(self.calculator.result, result)
 
     def test_results_property(self):
         self.assertEqual(self.calculator.result, 0)
