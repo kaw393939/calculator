@@ -1,4 +1,4 @@
-from CsvReader import CsvReader
+from CsvReader.CsvReader import CsvReader
 
 
 def addition(a, b):
@@ -31,14 +31,3 @@ class Calculator:
     def subtract(self, a, b):
         self.result = subtraction(a, b)
         return self.result
-
-
-class CSVStats(Calculator):
-    data = []
-
-    def __init__(self, data_file):
-        self.data = CsvReader(data_file)
-        pass
-
-    def mean(self):
-        mean(self.data)
