@@ -2,7 +2,6 @@ import unittest
 
 from Calculator.Calculator import Calculator
 from CsvReader.CsvReader import CsvReader
-from pathlib import Path
 
 
 class MyTestCase(unittest.TestCase):

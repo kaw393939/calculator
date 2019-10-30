@@ -1,6 +1,5 @@
 import csv
 from pathlib import Path
-# ...
 
 
 def ClassFactory(class_name, dictionary):
@@ -14,7 +13,6 @@ class CsvReader:
         self.data = []
         relative = Path(filepath)
         absolute = relative.absolute()
-        print(absolute)
         with open(absolute) as text_data:
             csv_data = csv.DictReader(text_data, delimiter=',')
             for row in csv_data:

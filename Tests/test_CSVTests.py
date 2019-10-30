@@ -1,5 +1,4 @@
 import unittest
-import os
 from CsvReader.CsvReader import CsvReader, ClassFactory
 
 
