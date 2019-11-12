@@ -4,6 +4,7 @@ from Statistics.SampleMean import sample_mean
 
 from CsvReader.CsvReader import CsvReader
 
+
 class Statistics(Calculator):
     data = []
 
