@@ -1,14 +1,19 @@
-import os
-import sys
-# from CsvReader.CsvReader import CsvReader
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pprint import pprint
+
+# Create an engine that stores data in the local directory's
+# sqlalchemy_example.db file.
+engine = create_engine('sqlite:////web/Sqlite-Data/example.db')
+
+# this loads the sqlalchemy base class
 Base = declarative_base()
 
+
+# Setting up the classes that create the record objects and define the schema
 
 class Person(Base):
     __tablename__ = 'person'
@@ -16,16 +21,6 @@ class Person(Base):
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
-
-
-class Subtraction(Base):
-    __tablename__ = 'subtraction'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    value1 = Column(Integer, nullable=False)
-    value2 = Column(Integer, nullable=False)
-    value3 = Column(Integer, nullable=False)
 
 
 class Address(Base):
@@ -36,22 +31,11 @@ class Address(Base):
     street_name = Column(String(250))
     street_number = Column(String(250))
     post_code = Column(String(250), nullable=False)
+    # creates the field to store the person id
     person_id = Column(Integer, ForeignKey('person.id'))
+    # creates the relationship between the person and addresses.  backref adds a property to the Person class to retrieve addresses
     person = relationship("Person", backref="addresses")
 
-
-class Orders(Base):
-    __tablename__ = 'orders'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
-
-
-# Create an engine that stores data in the local directory's
-# sqlalchemy_example.db file.
-engine = create_engine('sqlite:////web/Sqlite-Data/example.db')
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
@@ -80,41 +64,32 @@ new_person3 = Person(name='Steve')
 session.add(new_person1)
 session.commit()
 
-# Insert an Address in the address table
-new_address1 = Address(post_code='00000', person=new_person1)
-session.add(new_address1)
+# Insert an Address in the address table using a loop
 
-new_address2 = Address(post_code='00000', person=new_person2)
-session.add(new_address2)
-
-new_address3 = Address(post_code='00000', person=new_person3)
-session.add(new_address3)
-
-new_order = Orders(person=new_person1)
-session.add(new_order)
-session.commit()
-all_people = session.query(Person).join(Address).all()
-
-
-for person in all_people:
-    pprint(person.name)
-    for address in person.addresses:
-        pprint(address.post_code)
-
-    #print(f'{row.name} lives at {row.post_code}')
-
-
-
-objects = [
-    Person(name="u1"),
-    Person(name="u2"),
-    Person(name="u3")
+addresses = [
+    Address(post_code='00001', person=new_person1),
+    Address(post_code='00002', person=new_person2),
+    Address(post_code='00003', person=new_person3),
 ]
 
-#data_objects = CsvReader("Tests/Data/subtraction.csv").return_data_as_objects(Subtraction)
+# Loop through addresses and commit them to the database
+for address in addresses:
+    session.add(address)
+    session.commit()
 
+# joins Person on Address
+all_people = session.query(Person).join(Address).all()
 
-#pprint(all_people)
+# Accessing a person with their address, You have to loop the addresses property and remember it was added by the
+# backref on the addresses class
+for person in all_people:
+    # use the __dict__ magic method to have the object print it's properties
+    pprint(person.__dict__)
+    for address in person.addresses:
+        pprint(address.__dict__)
 
-session.bulk_save_objects(objects)
-session.commit()
+# Retrieving the inverse of the relationship.  Notice I reverse the Person and Address to load the Address table
+all_addresses = session.query(Address).join(Person).all()
+for address in all_addresses:
+    # showing how to use the print function with printing text and data at the same time easily
+    print(f'{address.person.name} has a postal code of {address.post_code}')
