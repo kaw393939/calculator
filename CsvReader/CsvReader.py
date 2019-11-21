@@ -23,3 +23,4 @@ class CsvReader:
         for row in self.data:
             objects.append(ClassFactory(class_name, row))
         return objects
+
