@@ -18,7 +18,7 @@ class CsvReader:
                 self.data.append(row)
         pass
 
-    def return_data_as_objects(self, class_name):
+    def return_data_as_class(self, class_name):
         objects = []
         for row in self.data:
             objects.append(ClassFactory(class_name, row))
